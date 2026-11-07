@@ -1305,49 +1305,61 @@ fn home(out: &mut Scene, state: &State, assets: &Assets, now: OffsetDateTime) {
                 },
             ),
         );
-        let art = Rect::new(rect.x + 21., rect.y + 20., 64., 64.);
-        if brand.is_some() {
-            out.draw.push(Draw::RoundedGradient(
-                art,
-                16.,
-                c(0xffffff, 0.22),
-                c(0xffffff, 0.08),
-            ));
-            out.border(art, 16., 1., c(0xffffff, 0.18));
+        // Branded cards show the device itself (PS5 Pro, Apple TV 4K); other inputs keep an icon plate.
+        let art_name = device_art(icon, state.preferences.input_title(input), &input.title);
+        let text_x = if art_name.is_some() { 196. } else { 103. };
+        if let Some(art_name) = art_name {
+            out.image(
+                assets.path(format!("ui-icons/{art_name}.lvec")),
+                Rect::new(rect.x + 12., rect.y + 4., 170., 96.),
+                0.,
+                true,
+            );
         } else {
-            out.draw.push(Draw::RoundedGradient(
-                art,
-                14.,
-                c(0xd6d6d6, 0.24),
-                c(0xa0a0a0, 0.10),
-            ));
-        }
-        let size = if icon == "apple-tv" { 47.2 } else { 40. };
-        out.icon(
-            assets,
-            &format!("input-{icon}"),
-            Rect::new(
-                art.x + (64. - size) / 2.,
-                art.y + (64. - size) / 2.,
-                size,
-                size,
-            ),
+            let art = Rect::new(rect.x + 21., rect.y + 20., 64., 64.);
             if brand.is_some() {
-                WHITE
+                out.draw.push(Draw::RoundedGradient(
+                    art,
+                    16.,
+                    c(0xffffff, 0.22),
+                    c(0xffffff, 0.08),
+                ));
+                out.border(art, 16., 1., c(0xffffff, 0.18));
             } else {
-                c(0xdedede, 1.)
-            },
-        );
+                out.draw.push(Draw::RoundedGradient(
+                    art,
+                    14.,
+                    c(0xd6d6d6, 0.24),
+                    c(0xa0a0a0, 0.10),
+                ));
+            }
+            let size = if icon == "apple-tv" { 47.2 } else { 40. };
+            out.icon(
+                assets,
+                &format!("input-{icon}"),
+                Rect::new(
+                    art.x + (64. - size) / 2.,
+                    art.y + (64. - size) / 2.,
+                    size,
+                    size,
+                ),
+                if brand.is_some() {
+                    WHITE
+                } else {
+                    c(0xdedede, 1.)
+                },
+            );
+        }
         out.text(
             state.preferences.input_title(input),
-            Rect::new(rect.x + 103., rect.y + 22.3, 400., 28.8),
+            Rect::new(rect.x + text_x, rect.y + 22.3, 300., 28.8),
             text(24.8, 600, -0.03),
             WHITE,
             false,
         );
         out.text(
             input_status(input, name.is_some(), language),
-            Rect::new(rect.x + 103., rect.y + 57.4, 400., 25.2),
+            Rect::new(rect.x + text_x, rect.y + 57.4, 300., 25.2),
             text(16.8, 400, 0.).leading(1.5),
             c(0xf2f2f2, if brand.is_some() { 0.70 } else { 0.48 }),
             false,
@@ -1416,6 +1428,18 @@ fn input_brand(icon: &str) -> Option<InputBrand> {
             focused_bottom: c(0x0f5c24, 0.96),
             accent: c(0x0f6b2a, 1.),
         }),
+        _ => None,
+    }
+}
+
+/// Full-colour device artwork for a recognised input. "Pro" in the custom name or the
+/// TV's CEC label picks the PS5 Pro with its striped shell.
+fn device_art(icon: &str, title: &str, label: &str) -> Option<&'static str> {
+    let pro = |name: &str| name.to_lowercase().contains("pro");
+    match icon {
+        "playstation" if pro(title) || pro(label) => Some("device-ps5-pro"),
+        "playstation" => Some("device-ps5"),
+        "apple-tv" => Some("device-apple-tv"),
         _ => None,
     }
 }
@@ -3127,7 +3151,8 @@ fn input_icon(input: &Input, custom: Option<&str>) -> &'static str {
 
 fn device_icon(name: &str) -> &'static str {
     let name = name.to_lowercase().replace(' ', "");
-    if name.contains("playstation") || ["ps1", "ps2", "ps3", "ps4", "ps5"].contains(&name.as_str())
+    if name.contains("playstation")
+        || ["ps1", "ps2", "ps3", "ps4", "ps5", "ps4pro", "ps5pro"].contains(&name.as_str())
     {
         "playstation"
     } else if name.contains("appletv") {
