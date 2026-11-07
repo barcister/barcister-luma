@@ -250,6 +250,15 @@ Press **Back** on Home, or hold **Back** for 0.6 seconds from any page, to open 
 
 These shortcuts work while Luma is focused. From another app, return to Luma first.
 
+### Porsche backgrounds
+
+This build adds three backgrounds: the **718 Spyder RS**, **Taycan** and **Macan Electric**. On
+its first run, Luma starts on the 718 Spyder RS and rotates through the three cars every 15 minutes
+and on each start, with a slow cross-fade. The other built-in backgrounds are set aside so only the
+cars rotate; your own uploads join the rotation. Turn rotation off in **Settings → Background**.
+To bring the other backgrounds back, remove the `deleted_backgrounds` list from
+`/media/developer/com.ecklf.luma/preferences.json` and restart Luma.
+
 ### Greeting and weather
 
 This build starts with **Good evening, Bálint.** and live weather for **Rothenthurm** (Schwyz) on its

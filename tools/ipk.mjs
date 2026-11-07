@@ -112,11 +112,16 @@ export function normalizeAndVerifyPackage(bytes, manifest) {
       'prism',
       'yosemite',
       'northern-lights',
+      'porsche-718-spyder-rs',
+      'porsche-taycan',
+      'porsche-macan-electric',
     ].flatMap((name) => [
       `assets/wallpapers/${name}.jpg`,
       `assets/thumbnails/${name}.jpg`,
       `splash/${name}.png`,
     ]),
+    'assets/devices/ps5-pro.png',
+    'assets/devices/apple-tv.png',
     ...vectorAssets.assets.map((name) => {
       if (typeof name !== 'string' || !/^(logos|ui-icons)\/[a-z0-9-]+\.lvec$/.test(name))
         throw new Error('Invalid packaged vector asset path.');

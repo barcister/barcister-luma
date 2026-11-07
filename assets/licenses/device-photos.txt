@@ -1,4 +1,4 @@
-Quick Switch device photos
+Quick Switch device photos and Porsche backgrounds
 
 ps5-pro.png
   "PlayStation 5 Pro no disc drive" by BeatEmUps
@@ -13,3 +13,17 @@ apple-tv.png
   Modified: cropped and scaled. This adaptation is licensed under CC BY-SA 4.0.
 
 PlayStation, PS5 and Apple TV are trademarks of their respective owners.
+
+wallpapers/porsche-718-spyder-rs.jpg
+  "Porsche 718 Spyder RS 3" by Calreyn88
+  https://commons.wikimedia.org/wiki/File:Porsche_718_Spyder_RS_3.jpg
+wallpapers/porsche-taycan.jpg
+  "Porsche Taycan GTS 1X7A6509" by Alexander Migl
+  https://commons.wikimedia.org/wiki/File:Porsche_Taycan_GTS_1X7A6509.jpg
+wallpapers/porsche-macan-electric.jpg
+  "PORSCHE MACAN (XAB) China" by Dinkun Chen
+  https://commons.wikimedia.org/wiki/File:PORSCHE_MACAN_(XAB)_China.jpg
+  Licence for all three: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+  Modified: cropped, scaled and composed over a blurred copy of the same photo. These
+  adaptations are licensed under CC BY-SA 4.0. Porsche, 718, Taycan and Macan are
+  trademarks of Dr. Ing. h.c. F. Porsche AG.

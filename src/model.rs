@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, HashSet};
 
 pub const CATEGORIES: [&str; 4] = ["Streaming", "Music", "Gaming", "Utilities"];
-pub const BACKGROUNDS: [(&str, &str); 9] = [
+pub const BACKGROUNDS: [(&str, &str); 12] = [
     ("slate", "Slate"),
     ("midnight", "Midnight"),
     ("prism", "Prism"),
@@ -14,6 +14,16 @@ pub const BACKGROUNDS: [(&str, &str); 9] = [
     ("forest", "Forest"),
     ("yosemite", "Yosemite"),
     ("northern-lights", "Northern lights"),
+    ("porsche-718-spyder-rs", "718 Spyder RS"),
+    ("porsche-taycan", "Taycan"),
+    ("porsche-macan-electric", "Macan Electric"),
+];
+
+/// The Porsche backgrounds this build rotates through from its first run.
+pub const FIRST_RUN_BACKGROUNDS: [&str; 3] = [
+    "porsche-718-spyder-rs",
+    "porsche-taycan",
+    "porsche-macan-electric",
 ];
 
 // Generic fallbacks use delimited words, so "game" does not match "endgame".
@@ -301,7 +311,8 @@ pub fn first_run_weather_location() -> crate::weather::Location {
 }
 
 impl Preferences {
-    /// Seeds the household name and weather place. Only called when no preferences file exists.
+    /// Seeds the household name, weather place and Porsche background rotation. Only called when
+    /// no preferences file exists.
     pub fn apply_first_run(&mut self) {
         if self.greeting_name.is_empty() {
             self.greeting_name = FIRST_RUN_GREETING_NAME.into();
@@ -309,6 +320,17 @@ impl Preferences {
         if self.weather_location.is_none() {
             self.weather_location = Some(first_run_weather_location());
         }
+        // Rotate through the three Porsches every 15 minutes and on each start. The other
+        // built-in backgrounds are set aside so the rotation shows only the cars.
+        self.background = FIRST_RUN_BACKGROUNDS[0].into();
+        self.splash_background = None;
+        self.wallpaper_cycle = true;
+        self.deleted_backgrounds = BACKGROUNDS
+            .iter()
+            .map(|(id, _)| *id)
+            .filter(|id| !FIRST_RUN_BACKGROUNDS.contains(id))
+            .map(str::to_owned)
+            .collect();
     }
 }
 

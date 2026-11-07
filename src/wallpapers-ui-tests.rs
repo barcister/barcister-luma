@@ -196,7 +196,7 @@ fn cycling_uses_all_uploaded_ids_but_not_deleted_or_pending_deletion_entries() {
     let first = custom(1);
     let second = custom(2);
     state.set_wallpapers(vec![first.clone(), second.clone()]);
-    state.preferences.background = "northern-lights".into();
+    state.preferences.background = BACKGROUNDS[BACKGROUNDS.len() - 1].0.into();
     state.deleting_wallpaper = Some(first.id.clone());
     assert!(state.cycle_wallpaper(100));
     assert_eq!(state.preferences.background, second.id);
@@ -205,7 +205,7 @@ fn cycling_uses_all_uploaded_ids_but_not_deleted_or_pending_deletion_entries() {
     assert!(state.cycle_wallpaper(200));
     assert_eq!(state.preferences.background, "slate");
     state.deleting_wallpaper = None;
-    state.preferences.background = "northern-lights".into();
+    state.preferences.background = BACKGROUNDS[BACKGROUNDS.len() - 1].0.into();
     assert!(state.cycle_wallpaper(300));
     assert_eq!(state.preferences.background, first.id);
     state.preferences.background = "dunes".into();
@@ -537,19 +537,19 @@ fn custom_gallery_navigation_reveals_whole_cards_in_incomplete_rows() {
     state.open(2);
     state.section = 1;
     state.set_wallpapers(vec![custom(1), custom(2)]);
-    state.focus = Target::Background(8);
+    state.focus = Target::Background(11);
     state.direction(Direction::Right, &controls(&state));
-    assert_eq!(state.focus, Target::Background(9));
+    assert_eq!(state.focus, Target::Background(12));
     state.direction(Direction::Right, &controls(&state));
-    assert_eq!(state.focus, Target::Background(10));
+    assert_eq!(state.focus, Target::Background(13));
     state.direction(Direction::Right, &controls(&state));
-    assert_eq!(state.focus, Target::Background(10));
+    assert_eq!(state.focus, Target::Background(13));
     state.direction(Direction::Down, &controls(&state));
-    assert_eq!(state.focus, Target::Background(10));
+    assert_eq!(state.focus, Target::Background(13));
     state.direction(Direction::Up, &controls(&state));
-    assert_eq!(state.focus, Target::Background(7));
-    state.direction(Direction::Down, &controls(&state));
     assert_eq!(state.focus, Target::Background(10));
+    state.direction(Direction::Down, &controls(&state));
+    assert_eq!(state.focus, Target::Background(13));
     let focused = controls(&state)
         .into_iter()
         .find(|c| c.target == state.focus)
@@ -607,20 +607,20 @@ fn catalog_updates_keep_the_focused_image_and_pointer_geometry_stationary() {
     state.section = 1;
     let item = custom(1);
     state.set_wallpapers(vec![item.clone()]);
-    state.focus = Target::Background(9);
+    state.focus = Target::Background(12);
     state.set_wallpapers(vec![custom(2), item.clone()]);
-    assert_eq!(state.focus, Target::Background(10));
-    assert_eq!(state.background_id(10), Some(item.id.as_str()));
+    assert_eq!(state.focus, Target::Background(13));
+    assert_eq!(state.background_id(13), Some(item.id.as_str()));
     let scroll = state.scroll;
     let before = controls(&state)
         .into_iter()
-        .find(|c| c.target == Target::Background(10))
+        .find(|c| c.target == Target::Background(13))
         .unwrap();
-    state.pointer_focus(Target::Background(10));
+    state.pointer_focus(Target::Background(13));
     assert_eq!(state.scroll, scroll);
     let after = controls(&state)
         .into_iter()
-        .find(|c| c.target == Target::Background(10))
+        .find(|c| c.target == Target::Background(13))
         .unwrap();
     assert_eq!((before.rect.x, before.rect.y), (after.rect.x, after.rect.y));
 }

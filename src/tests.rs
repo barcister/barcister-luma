@@ -3325,3 +3325,28 @@ fn first_run_greets_balint_with_rothenthurm_weather_but_keeps_saved_choices() {
     assert_eq!(chosen.greeting_name, "Ana");
     assert_eq!(chosen.weather_location.unwrap().name, "Zug");
 }
+
+#[test]
+fn first_run_rotates_only_the_porsche_backgrounds() {
+    let mut fresh = crate::model::Preferences::default();
+    fresh.apply_first_run();
+    fresh.sanitize();
+    assert!(fresh.wallpaper_cycle);
+    assert_eq!(fresh.background, "porsche-718-spyder-rs");
+    let mut state = State::new(fresh);
+    let mut seen = vec![state.preferences.background.clone()];
+    for minute in 1..=3 {
+        state.preferences.wallpaper_changed = 0;
+        assert!(state.cycle_wallpaper(minute * crate::wallpaper_cycle::INTERVAL));
+        seen.push(state.preferences.background.clone());
+    }
+    assert_eq!(
+        seen,
+        [
+            "porsche-718-spyder-rs",
+            "porsche-taycan",
+            "porsche-macan-electric",
+            "porsche-718-spyder-rs"
+        ]
+    );
+}
