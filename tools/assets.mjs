@@ -12,7 +12,15 @@ const highResolution = process.argv.includes('--4k');
 for (const legacy of ['app-icons', 'icons.json', 'colors.json']) {
   await fs.rm(path.join(out, legacy), { recursive: true, force: true });
 }
-for (const directory of ['wallpapers', 'thumbnails', 'logos', 'ui-icons', 'surfaces', 'splash', 'devices']) {
+for (const directory of [
+  'wallpapers',
+  'thumbnails',
+  'logos',
+  'ui-icons',
+  'surfaces',
+  'splash',
+  'devices',
+]) {
   await fs.mkdir(path.join(out, directory), { recursive: true });
 }
 

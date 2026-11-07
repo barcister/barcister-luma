@@ -19,7 +19,7 @@
   by Calreyn88, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 - `assets/wallpapers/porsche-taycan.jpg`: [Porsche Taycan GTS 1X7A6509](https://commons.wikimedia.org/wiki/File:Porsche_Taycan_GTS_1X7A6509.jpg)
   by Alexander Migl, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
-- `assets/wallpapers/porsche-macan-electric.jpg`: [PORSCHE MACAN (XAB) China](https://commons.wikimedia.org/wiki/File:PORSCHE_MACAN_(XAB)_China.jpg)
+- `assets/wallpapers/porsche-macan-electric.jpg`: [PORSCHE MACAN (XAB) China](<https://commons.wikimedia.org/wiki/File:PORSCHE_MACAN_(XAB)_China.jpg>)
   by Dinkun Chen, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 - Changes to the three Porsche photos: cropped, scaled, and composed into 1920×1080 wallpapers
   with the car in the upper right over a blurred, darkened copy of the same photo. These
