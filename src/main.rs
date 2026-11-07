@@ -671,6 +671,9 @@ fn run() -> Result<(), String> {
     if first_run {
         initial_preferences.apply_first_run();
     }
+    if options.script.is_empty() {
+        initial_preferences.apply_household_inputs();
+    }
     let public_update_checks = update::public_checks_enabled(
         !options.script.is_empty(),
         options.test_update_version.is_some(),

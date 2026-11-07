@@ -21,10 +21,17 @@
   by Alexander Migl, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 - `assets/wallpapers/porsche-macan-electric.jpg`: [PORSCHE MACAN (XAB) China](<https://commons.wikimedia.org/wiki/File:PORSCHE_MACAN_(XAB)_China.jpg>)
   by Dinkun Chen, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
-- Changes to the three Porsche photos: cropped, scaled, and composed into 1920×1080 wallpapers
-  with the car in the upper right over a blurred, darkened copy of the same photo. These
-  adaptations are shared under CC BY-SA 4.0. Porsche, 718, Taycan and Macan are trademarks of
-  Dr. Ing. h.c. F. Porsche AG; Luma is not affiliated with Porsche.
+- `assets/wallpapers/porsche-718-spyder-rs-ruby.jpg`: [2025 Porsche 718 Spyder RS](https://commons.wikimedia.org/wiki/File:2025_Porsche_718_Spyder_RS.jpg)
+  by TTTNIS, [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+- `assets/wallpapers/porsche-taycan-rose.jpg`: [PORSCHE TAYCAN China (15)](<https://commons.wikimedia.org/wiki/File:PORSCHE_TAYCAN_China_(15).jpg>)
+  by Dinkun Chen, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+- `assets/wallpapers/porsche-macan-electric-slate.jpg`: [Porsche Macan (XAB) IMG 2425](<https://commons.wikimedia.org/wiki/File:Porsche_Macan_(XAB)_IMG_2425.jpg>)
+  by Alexander-93, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+- Changes to the Porsche photos: cropped, scaled and lightly adjusted for contrast and colour
+  into full-screen 1920×1080 wallpapers; the Ruby Star photo is widened with a blurred copy of
+  itself above and below. The CC BY-SA adaptations are shared under CC BY-SA 4.0. Porsche, 718,
+  Taycan and Macan are trademarks of Dr. Ing. h.c. F. Porsche AG; Luma is not affiliated with
+  Porsche.
 - Inter variable font (Latin, Latin Extended-A, Vietnamese + Cyrillic subset, `opsz` pinned at 14): Rasmus Andersson, SIL Open Font License 1.1, `assets/fonts/ofl.txt`.
 - Noto Sans SC: copyright 2014–2021 Adobe, SIL OFL 1.1. Source/license in `assets/fonts/`;
   `tools/font-assets.mjs` pins the Google Fonts revision and checksums. Generated regular/medium

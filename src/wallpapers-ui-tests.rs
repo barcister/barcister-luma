@@ -537,19 +537,22 @@ fn custom_gallery_navigation_reveals_whole_cards_in_incomplete_rows() {
     state.open(2);
     state.section = 1;
     state.set_wallpapers(vec![custom(1), custom(2)]);
-    state.focus = Target::Background(11);
+    // The built-in backgrounds fill whole rows of three; the two uploads start a new, partial row.
+    let n = BACKGROUNDS.len();
+    assert_eq!(n % 3, 0);
+    state.focus = Target::Background(n - 1);
     state.direction(Direction::Right, &controls(&state));
-    assert_eq!(state.focus, Target::Background(12));
+    assert_eq!(state.focus, Target::Background(n));
     state.direction(Direction::Right, &controls(&state));
-    assert_eq!(state.focus, Target::Background(13));
+    assert_eq!(state.focus, Target::Background(n + 1));
     state.direction(Direction::Right, &controls(&state));
-    assert_eq!(state.focus, Target::Background(13));
+    assert_eq!(state.focus, Target::Background(n + 1));
     state.direction(Direction::Down, &controls(&state));
-    assert_eq!(state.focus, Target::Background(13));
+    assert_eq!(state.focus, Target::Background(n + 1));
     state.direction(Direction::Up, &controls(&state));
-    assert_eq!(state.focus, Target::Background(10));
+    assert_eq!(state.focus, Target::Background(n - 2));
     state.direction(Direction::Down, &controls(&state));
-    assert_eq!(state.focus, Target::Background(13));
+    assert_eq!(state.focus, Target::Background(n + 1));
     let focused = controls(&state)
         .into_iter()
         .find(|c| c.target == state.focus)
@@ -607,20 +610,23 @@ fn catalog_updates_keep_the_focused_image_and_pointer_geometry_stationary() {
     state.section = 1;
     let item = custom(1);
     state.set_wallpapers(vec![item.clone()]);
-    state.focus = Target::Background(12);
+    state.focus = Target::Background(BACKGROUNDS.len());
     state.set_wallpapers(vec![custom(2), item.clone()]);
-    assert_eq!(state.focus, Target::Background(13));
-    assert_eq!(state.background_id(13), Some(item.id.as_str()));
+    assert_eq!(state.focus, Target::Background(BACKGROUNDS.len() + 1));
+    assert_eq!(
+        state.background_id(BACKGROUNDS.len() + 1),
+        Some(item.id.as_str())
+    );
     let scroll = state.scroll;
     let before = controls(&state)
         .into_iter()
-        .find(|c| c.target == Target::Background(13))
+        .find(|c| c.target == Target::Background(BACKGROUNDS.len() + 1))
         .unwrap();
-    state.pointer_focus(Target::Background(13));
+    state.pointer_focus(Target::Background(BACKGROUNDS.len() + 1));
     assert_eq!(state.scroll, scroll);
     let after = controls(&state)
         .into_iter()
-        .find(|c| c.target == Target::Background(13))
+        .find(|c| c.target == Target::Background(BACKGROUNDS.len() + 1))
         .unwrap();
     assert_eq!((before.rect.x, before.rect.y), (after.rect.x, after.rect.y));
 }

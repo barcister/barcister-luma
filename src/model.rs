@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, HashSet};
 
 pub const CATEGORIES: [&str; 4] = ["Streaming", "Music", "Gaming", "Utilities"];
-pub const BACKGROUNDS: [(&str, &str); 12] = [
+pub const BACKGROUNDS: [(&str, &str); 15] = [
     ("slate", "Slate"),
     ("midnight", "Midnight"),
     ("prism", "Prism"),
@@ -17,13 +17,19 @@ pub const BACKGROUNDS: [(&str, &str); 12] = [
     ("porsche-718-spyder-rs", "718 Spyder RS"),
     ("porsche-taycan", "Taycan"),
     ("porsche-macan-electric", "Macan Electric"),
+    ("porsche-718-spyder-rs-ruby", "718 Spyder RS Ruby Star"),
+    ("porsche-taycan-rose", "Taycan Rose"),
+    ("porsche-macan-electric-slate", "Macan Electric Slate"),
 ];
 
 /// The Porsche backgrounds this build rotates through from its first run.
-pub const FIRST_RUN_BACKGROUNDS: [&str; 3] = [
+pub const FIRST_RUN_BACKGROUNDS: [&str; 6] = [
     "porsche-718-spyder-rs",
     "porsche-taycan",
     "porsche-macan-electric",
+    "porsche-718-spyder-rs-ruby",
+    "porsche-taycan-rose",
+    "porsche-macan-electric-slate",
 ];
 
 // Generic fallbacks use delimited words, so "game" does not match "endgame".
@@ -310,7 +316,26 @@ pub fn first_run_weather_location() -> crate::weather::Location {
     }
 }
 
+/// This household's devices: the TV's own labels for these ports stay "HDMI 3" and "HDMI 4",
+/// so Luma names them here to show the PS5 Pro and Apple TV photos in Quick Switch.
+pub const HOUSEHOLD_INPUTS: [(&str, &str); 2] = [
+    ("com.webos.app.hdmi3", "PS5 Pro"),
+    ("com.webos.app.hdmi4", "Apple TV"),
+];
+
 impl Preferences {
+    /// Names the household's PS5 Pro and Apple TV ports and keeps them on Home. Runs at every
+    /// start, but only fills a name or visibility that is not already set, so a rename or a
+    /// visibility choice made in Settings is kept.
+    pub fn apply_household_inputs(&mut self) {
+        for (id, name) in HOUSEHOLD_INPUTS {
+            self.input_names
+                .entry(id.into())
+                .or_insert_with(|| name.into());
+            self.input_modes.entry(id.into()).or_insert(InputMode::On);
+        }
+    }
+
     /// Seeds the household name, weather place and Porsche background rotation. Only called when
     /// no preferences file exists.
     pub fn apply_first_run(&mut self) {

@@ -114,8 +114,11 @@ https://github.com/user-attachments/assets/2156d640-b8fa-4ea4-a02c-0db4c93bcc5a
 
 ### Homebrew Channel
 
+This build checks for updates in its own repository, so an upstream Luma release never replaces
+it. Once this fork publishes a release, add its feed to Homebrew Channel:
+
 ```text
-https://github.com/ecklf/lg-luma/releases/latest/download/repo.json
+https://github.com/barcister/barcister-luma/releases/latest/download/repo.json
 ```
 
 ### SSH
@@ -261,9 +264,9 @@ These shortcuts work while Luma is focused. From another app, return to Luma fir
 
 ### Porsche backgrounds
 
-This build adds three backgrounds: the **718 Spyder RS**, **Taycan** and **Macan Electric**. On
-its first run, Luma starts on the 718 Spyder RS and rotates through the three cars every 15 minutes
-and on each start, with a slow cross-fade. The other built-in backgrounds are set aside so only the
+This build adds six full-screen backgrounds: two each of the **718 Spyder RS**, **Taycan** and
+**Macan Electric**. On its first run, Luma starts on the 718 Spyder RS and rotates through the cars
+every 15 minutes and on each start, with a slow cross-fade. The other built-in backgrounds are set aside so only the
 cars rotate; your own uploads join the rotation. Turn rotation off in **Settings → Background**.
 To bring the other backgrounds back, remove the `deleted_backgrounds` list from
 `/media/developer/com.ecklf.luma/preferences.json` and restart Luma.

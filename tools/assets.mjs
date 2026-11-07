@@ -97,10 +97,20 @@ for (const file of await fs.readdir(path.join(source, 'wallpapers'))) {
     await sharp(data)
       .jpeg({ quality: 96 })
       .toFile(path.join(out, 'wallpapers', `${id}-plain${scale === 2 ? '@2x' : ''}.jpg`));
+    // The Porsche backgrounds keep the car at full strength: a soft left fade behind the greeting
+    // and a gentle bottom fade behind the tiles, instead of the stock shading that darkens the
+    // lower half of a landscape almost to black.
+    const car = id.startsWith('porsche-');
+    const vertical = car
+      ? '<stop stop-color="#0d1013" stop-opacity=".2"/><stop offset=".16" stop-color="#0e1115" stop-opacity="0"/><stop offset=".45" stop-color="#0f1114" stop-opacity=".08"/><stop offset=".75" stop-color="#111317" stop-opacity=".45"/><stop offset="1" stop-color="#17191d" stop-opacity=".72"/>'
+      : '<stop stop-color="#0d1013" stop-opacity=".24"/><stop offset=".19" stop-color="#0e1115" stop-opacity=".08"/><stop offset=".35" stop-color="#0f1114" stop-opacity=".35"/><stop offset=".63" stop-color="#111317" stop-opacity=".86"/><stop offset=".85" stop-color="#17191d" stop-opacity=".92157"/><stop offset="1" stop-color="#17191d" stop-opacity=".96078"/>';
+    const horizontal = car
+      ? '<stop stop-color="#111417" stop-opacity=".68"/><stop offset=".3" stop-color="#111417" stop-opacity=".4"/><stop offset=".58" stop-color="#111417" stop-opacity="0"/>'
+      : '<stop stop-color="#111417" stop-opacity=".42"/><stop offset=".75" stop-color="#111417" stop-opacity="0"/>';
     const shaded = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 1920 1080"><defs>
-    <linearGradient id="v" x2="0" y2="1"><stop stop-color="#0d1013" stop-opacity=".24"/><stop offset=".19" stop-color="#0e1115" stop-opacity=".08"/><stop offset=".35" stop-color="#0f1114" stop-opacity=".35"/><stop offset=".63" stop-color="#111317" stop-opacity=".86"/><stop offset=".85" stop-color="#17191d" stop-opacity=".92157"/><stop offset="1" stop-color="#17191d" stop-opacity=".96078"/></linearGradient>
-    <linearGradient id="h"><stop stop-color="#111417" stop-opacity=".42"/><stop offset=".75" stop-color="#111417" stop-opacity="0"/></linearGradient></defs>
-    <path fill="#17191c" d="M0 0h1920v1080H0z"/><image href="data:image/png;base64,${data.toString('base64')}" width="1920" height="1080" opacity=".92"/><path fill="url(#h)" d="M0 0h1920v1080H0z"/><path fill="url(#v)" d="M0 0h1920v1080H0z"/></svg>`;
+    <linearGradient id="v" x2="0" y2="1">${vertical}</linearGradient>
+    <linearGradient id="h">${horizontal}</linearGradient></defs>
+    <path fill="#17191c" d="M0 0h1920v1080H0z"/><image href="data:image/png;base64,${data.toString('base64')}" width="1920" height="1080" opacity="${car ? 1 : 0.92}"/><path fill="url(#h)" d="M0 0h1920v1080H0z"/><path fill="url(#v)" d="M0 0h1920v1080H0z"/></svg>`;
     // This generated SVG embeds a trusted bundled photograph; its data URL can
     // exceed libxml's default 10 MiB attribute limit at 4K.
     await sharp(Buffer.from(shaded), { unlimited: true })

@@ -5,6 +5,19 @@ import { spawnSync } from 'node:child_process';
 import sharp from 'sharp';
 
 const root = path.resolve(import.meta.dirname, '..');
+// Built-in backgrounds, read from the source so gallery navigation follows the list.
+const modelSource = await fs.readFile(path.join(root, 'src/model.rs'), 'utf8');
+const backgroundsBlock = modelSource.slice(
+  modelSource.indexOf('pub const BACKGROUNDS'),
+  modelSource.indexOf('];', modelSource.indexOf('pub const BACKGROUNDS')),
+);
+const builtInBackgrounds = [...backgroundsBlock.matchAll(/\("([a-z0-9-]+)", "[^"]+"\)/g)].map(
+  (match) => match[1],
+);
+const forestIndex = builtInBackgrounds.indexOf('forest');
+// Rows between Forest and the first upload in the 3-column gallery.
+const rowsToUpload = (builtInBackgrounds.length - forestIndex) / 3;
+assert.ok(Number.isInteger(rowsToUpload), 'Built-in backgrounds fill whole gallery rows');
 const out = path.join(root, '.build');
 await fs.mkdir(out, { recursive: true });
 const run = (command, args) => {
@@ -203,19 +216,19 @@ try {
     .jpeg()
     .toFile(path.join(customDirectory, 'thumbnail.jpg'));
   await fs.writeFile(path.join(customDirectory, 'metadata.json'), JSON.stringify({ id: customId }));
-  // The custom upload follows the 12 built-in backgrounds: two rows below Forest in the 3-column gallery.
+  // The custom upload follows the built-in backgrounds, whole rows below Forest.
   const custom = await scenario(
     'wallpaper-custom',
-    'settings,down,down,enter,down,down,enter,enter',
+    `settings,down,down,enter,${'down,'.repeat(rowsToUpload)}enter,enter`,
   );
   assert.equal(custom.preferences.background, customId);
   assert.equal(custom.modal, false);
-  assert.deepEqual(custom.focus, { Background: 12 });
+  assert.deepEqual(custom.focus, { Background: builtInBackgrounds.length });
   const customRestored = await scenario('wallpaper-custom-restored', 'home,down');
   assert.equal(customRestored.preferences.background, customId);
   const bundledRestored = await scenario(
     'wallpaper-bundled-restored',
-    'settings,down,down,enter,up,up,enter,enter',
+    `settings,down,down,enter,${'up,'.repeat(rowsToUpload)}enter,enter`,
   );
   assert.equal(bundledRestored.preferences.background, 'forest');
   const clock = await scenario('clock', 'settings,click:900:284');

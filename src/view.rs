@@ -1344,7 +1344,7 @@ fn home(out: &mut Scene, state: &State, assets: &Assets, now: OffsetDateTime) {
             false,
         );
         out.text(
-            input_status(input, name.is_some(), language),
+            quick_switch_status(input, language),
             Rect::new(rect.x + 20., rect.y + 192., rect.w - 40., 25.2),
             text(16.8, 400, 0.).leading(1.5),
             soft,
@@ -1392,8 +1392,12 @@ fn input_brand(icon: &str) -> Option<InputBrand> {
             top: c(0x4a4a4f, 0.90),
             bottom: c(0x111113, 0.92),
         }),
-        // Other consoles: a deep green.
-        "console" => Some(InputBrand {
+        // Other consoles: a deep green (Nintendo red for Switch).
+        "switch" | "switch2" => Some(InputBrand {
+            top: c(0xe60012, 0.88),
+            bottom: c(0x8a000b, 0.92),
+        }),
+        "console" | "xbox" => Some(InputBrand {
             top: c(0x1f8a3a, 0.90),
             bottom: c(0x0b4a1c, 0.92),
         }),
@@ -1418,8 +1422,8 @@ fn quick_switch_rank(icon: &str) -> u8 {
     match icon {
         "apple-tv" => 0,
         "playstation" => 1,
-        "console" => 2,
-        "streamer" | "computer" => 3,
+        "console" | "xbox" | "switch" | "switch2" => 2,
+        "streamer" | "computer" | "shield" => 3,
         _ => 4,
     }
 }
@@ -3152,6 +3156,18 @@ fn device_icon(name: &str) -> &'static str {
         "hdmi"
     }
 }
+/// The short line under a Quick Switch tile: the port and its state ("HDMI 4 · Connected").
+/// The tile's title already names the device, and the tile is too narrow to repeat it.
+pub fn quick_switch_status(input: &Input, language: Language) -> String {
+    let state = match input.connected {
+        Some(false) => language.t("noDevice"),
+        None => language.t("externalInput"),
+        Some(true) if input.signal == Some(false) => language.t("noSignal"),
+        Some(true) => language.t("connected"),
+    };
+    format!("{} · {state}", input.port)
+}
+
 /// Detail under an input title: the TV's own label (when connected and not just
 /// the port), the port when a custom name replaces it, then the status.
 pub fn input_status(input: &Input, renamed: bool, language: Language) -> String {

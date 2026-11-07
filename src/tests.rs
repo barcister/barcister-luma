@@ -2793,11 +2793,7 @@ fn clock_date_and_home_input_descriptions_use_larger_text() {
             )));
         }
         let input = &state.inventory.inputs[0];
-        let description = view::input_status(
-            input,
-            state.preferences.input_name(input).is_some(),
-            language,
-        );
+        let description = view::quick_switch_status(input, language);
         assert!(rendered.draw.iter().any(|draw| matches!(draw,
             Draw::Text(text, rect, style, ..) if text == &description && style.size == 16.8 && rect.h == 25.2
         )));
@@ -3328,25 +3324,81 @@ fn first_run_greets_balint_with_rothenthurm_weather_but_keeps_saved_choices() {
 
 #[test]
 fn first_run_rotates_only_the_porsche_backgrounds() {
+    use crate::model::FIRST_RUN_BACKGROUNDS;
     let mut fresh = crate::model::Preferences::default();
     fresh.apply_first_run();
     fresh.sanitize();
     assert!(fresh.wallpaper_cycle);
-    assert_eq!(fresh.background, "porsche-718-spyder-rs");
+    assert_eq!(fresh.background, FIRST_RUN_BACKGROUNDS[0]);
     let mut state = State::new(fresh);
     let mut seen = vec![state.preferences.background.clone()];
-    for minute in 1..=3 {
+    for step in 1..=FIRST_RUN_BACKGROUNDS.len() as u64 {
         state.preferences.wallpaper_changed = 0;
-        assert!(state.cycle_wallpaper(minute * crate::wallpaper_cycle::INTERVAL));
+        assert!(state.cycle_wallpaper(step * crate::wallpaper_cycle::INTERVAL));
         seen.push(state.preferences.background.clone());
     }
+    // Every Porsche once, in order, then back to the first; no stock background appears.
+    let mut expected: Vec<_> = FIRST_RUN_BACKGROUNDS
+        .iter()
+        .map(|id| id.to_string())
+        .collect();
+    expected.push(FIRST_RUN_BACKGROUNDS[0].into());
+    assert_eq!(seen, expected);
+}
+
+#[test]
+fn household_ports_show_the_ps5_pro_and_apple_tv_photos_but_keep_settings_choices() {
+    use crate::renderer::Draw;
+    let mut state = ready();
+    state.inventory.inputs = vec![
+        crate::model::Input {
+            id: "com.webos.app.hdmi3".into(),
+            title: "HDMI 3".into(),
+            port: "HDMI 3".into(),
+            connected: Some(true),
+            signal: None,
+        },
+        crate::model::Input {
+            id: "com.webos.app.hdmi4".into(),
+            title: "HDMI 4".into(),
+            port: "HDMI 4".into(),
+            connected: None,
+            signal: None,
+        },
+    ];
+    state
+        .device_photos
+        .insert("ps5-pro".into(), "/assets/devices/ps5-pro.png".into());
+    state
+        .device_photos
+        .insert("apple-tv".into(), "/assets/devices/apple-tv.png".into());
+    state.preferences.apply_household_inputs();
+    let drawn = scene(&state);
+    for photo in [
+        "/assets/devices/ps5-pro.png",
+        "/assets/devices/apple-tv.png",
+    ] {
+        assert!(
+            drawn
+                .draw
+                .iter()
+                .any(|draw| matches!(draw, Draw::Image(path, ..) if path == photo)),
+            "{photo} is drawn on Home"
+        );
+    }
+
+    let mut chosen = crate::model::Preferences::default();
+    chosen
+        .input_names
+        .insert("com.webos.app.hdmi3".into(), "Xbox".into());
+    chosen
+        .input_modes
+        .insert("com.webos.app.hdmi4".into(), crate::model::InputMode::Off);
+    chosen.apply_household_inputs();
+    assert_eq!(chosen.input_names["com.webos.app.hdmi3"], "Xbox");
+    assert_eq!(chosen.input_names["com.webos.app.hdmi4"], "Apple TV");
     assert_eq!(
-        seen,
-        [
-            "porsche-718-spyder-rs",
-            "porsche-taycan",
-            "porsche-macan-electric",
-            "porsche-718-spyder-rs"
-        ]
+        chosen.input_modes["com.webos.app.hdmi4"],
+        crate::model::InputMode::Off
     );
 }
