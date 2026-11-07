@@ -1889,6 +1889,21 @@
     "nl": "Ingangen",
     "sv": "Ingångar"
   },
+  "quickSwitch": {
+    "zh-tw": "快速切換",
+    "en": "Quick Switch",
+    "de": "Schnellwechsel",
+    "es": "Cambio rápido",
+    "zh": "快速切换",
+    "pt": "Troca rápida",
+    "it": "Cambio rapido",
+    "ru": "Быстрое переключение",
+    "pl": "Szybkie przełączanie",
+    "fr": "Accès rapide",
+    "vi": "Chuyển nhanh",
+    "nl": "Snel wisselen",
+    "sv": "Snabbbyte"
+  },
   "noInputs": {
     "zh-tw": "沒有可用的輸入來源。",
     "en": "No inputs to show.",

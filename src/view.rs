@@ -1244,15 +1244,20 @@ fn home(out: &mut Scene, state: &State, assets: &Assets, now: OffsetDateTime) {
     out.draw.push(Draw::EdgeFadeX(None));
     out.draw.push(Draw::Clip(Some(state.content_viewport())));
     let input_y = 544.8 + grid_height + 41.6 - s;
-    let inputs: Vec<_> = state
+    // Quick Switch: recognised devices (PlayStation, Apple TV, consoles) lead the row with
+    // their own brand colours so the one-press jump to a console or streamer is easy to spot.
+    let mut inputs: Vec<_> = state
         .inventory
         .inputs
         .iter()
         .filter(|input| state.preferences.input_visible(input))
         .collect();
+    inputs.sort_by_key(|input| {
+        quick_switch_rank(input_icon(input, state.preferences.input_name(input)))
+    });
     if !inputs.is_empty() {
         out.text(
-            language.t("inputsHeading"),
+            language.t("quickSwitch"),
             Rect::new(84., input_y + 3.3, 1000., 31.),
             text(23.2, 550, -0.035).leading(1.3),
             WHITE,
@@ -1267,72 +1272,162 @@ fn home(out: &mut Scene, state: &State, assets: &Assets, now: OffsetDateTime) {
             104.,
         );
         let focused = state.focus == Target::Input(input.id.clone());
+        let name = state.preferences.input_name(input);
+        let icon = input_icon(input, name);
+        let brand = input_brand(icon);
         out.shadow(
             rect,
             18.4,
             if focused { 34. } else { 4. },
             if focused { 14. } else { 1. },
-            if focused { 0.4 } else { 0.01 },
+            if focused { 0.45 } else { 0.01 },
         );
-        out.draw.push(Draw::RoundedGradient(
-            rect,
-            18.4,
-            if focused {
-                c(0x30363c, 0.70)
-            } else {
-                c(0x20252b, 0.60)
-            },
-            if focused {
-                c(0x242a30, 0.65)
-            } else {
-                c(0x171c22, 0.55)
-            },
-        ));
+        let (top, bottom) = match brand {
+            Some(brand) if focused => (brand.focused_top, brand.focused_bottom),
+            Some(brand) => (brand.top, brand.bottom),
+            None if focused => (c(0x30363c, 0.70), c(0x242a30, 0.65)),
+            None => (c(0x20252b, 0.60), c(0x171c22, 0.55)),
+        };
+        out.draw
+            .push(Draw::RoundedGradient(rect, 18.4, top, bottom));
         out.border(
             rect,
             18.4,
             1.,
-            c(0xffffff, if focused { 0.24 } else { 0.063 }),
+            c(
+                0xffffff,
+                if focused {
+                    0.30
+                } else if brand.is_some() {
+                    0.12
+                } else {
+                    0.063
+                },
+            ),
         );
-        let art = Rect::new(rect.x + 21., rect.y + 24., 56., 56.);
-        out.draw.push(Draw::RoundedGradient(
-            art,
-            12.8,
-            c(0xd6d6d6, 0.24),
-            c(0xa0a0a0, 0.10),
-        ));
-        let name = state.preferences.input_name(input);
-        let icon = input_icon(input, name);
-        let size = if icon == "apple-tv" { 41.6 } else { 35.2 };
+        let art = Rect::new(rect.x + 21., rect.y + 20., 64., 64.);
+        if brand.is_some() {
+            out.draw.push(Draw::RoundedGradient(
+                art,
+                16.,
+                c(0xffffff, 0.22),
+                c(0xffffff, 0.08),
+            ));
+            out.border(art, 16., 1., c(0xffffff, 0.18));
+        } else {
+            out.draw.push(Draw::RoundedGradient(
+                art,
+                14.,
+                c(0xd6d6d6, 0.24),
+                c(0xa0a0a0, 0.10),
+            ));
+        }
+        let size = if icon == "apple-tv" { 47.2 } else { 40. };
         out.icon(
             assets,
             &format!("input-{icon}"),
             Rect::new(
-                art.x + (56. - size) / 2.,
-                art.y + (56. - size) / 2.,
+                art.x + (64. - size) / 2.,
+                art.y + (64. - size) / 2.,
                 size,
                 size,
             ),
-            c(0xdedede, 1.),
+            if brand.is_some() {
+                WHITE
+            } else {
+                c(0xdedede, 1.)
+            },
         );
         out.text(
             state.preferences.input_title(input),
-            Rect::new(rect.x + 93., rect.y + 24.3, 450., 28.8),
-            text(24., 500, -0.03),
+            Rect::new(rect.x + 103., rect.y + 22.3, 400., 28.8),
+            text(24.8, 600, -0.03),
             WHITE,
             false,
         );
         out.text(
             input_status(input, name.is_some(), language),
-            Rect::new(rect.x + 93., rect.y + 57.4, 450., 25.2),
+            Rect::new(rect.x + 103., rect.y + 57.4, 400., 25.2),
             text(16.8, 400, 0.).leading(1.5),
-            c(0xe8e8e8, 0.48),
+            c(0xf2f2f2, if brand.is_some() { 0.70 } else { 0.48 }),
             false,
+        );
+        // A round "go" button signals that one press switches straight to the device.
+        let go = Rect::new(rect.x + rect.w - 66., rect.y + 31., 42., 42.);
+        out.shape(
+            go,
+            21.,
+            if focused {
+                c(0xffffff, 0.95)
+            } else {
+                c(0xffffff, if brand.is_some() { 0.16 } else { 0.08 })
+            },
+        );
+        out.icon(
+            assets,
+            "arrow",
+            Rect::new(go.x + 10., go.y + 10., 22., 22.),
+            if focused {
+                brand.map_or(c(0x17191c, 1.), |brand| brand.accent)
+            } else {
+                c(0xffffff, 0.85)
+            },
         );
         if focused {
             out.ring(rect, 18.4);
         }
         out.control(Target::Input(input.id.clone()), rect, true);
+    }
+}
+
+/// Brand colours for Quick Switch cards; plain HDMI ports keep the neutral glass style.
+#[derive(Clone, Copy)]
+struct InputBrand {
+    top: Color,
+    bottom: Color,
+    focused_top: Color,
+    focused_bottom: Color,
+    accent: Color,
+}
+
+fn input_brand(icon: &str) -> Option<InputBrand> {
+    match icon {
+        // PlayStation blue.
+        "playstation" => Some(InputBrand {
+            top: c(0x0a6fd6, 0.92),
+            bottom: c(0x00327a, 0.92),
+            focused_top: c(0x2b8af0, 0.97),
+            focused_bottom: c(0x0047a8, 0.97),
+            accent: c(0x0064c8, 1.),
+        }),
+        // Apple TV graphite.
+        "apple-tv" => Some(InputBrand {
+            top: c(0x4a4a4f, 0.90),
+            bottom: c(0x111113, 0.92),
+            focused_top: c(0x606066, 0.96),
+            focused_bottom: c(0x1c1c1f, 0.96),
+            accent: c(0x111113, 1.),
+        }),
+        // Other consoles: a deep green.
+        "console" => Some(InputBrand {
+            top: c(0x1f8a3a, 0.90),
+            bottom: c(0x0b4a1c, 0.92),
+            focused_top: c(0x2ea84c, 0.96),
+            focused_bottom: c(0x0f5c24, 0.96),
+            accent: c(0x0f6b2a, 1.),
+        }),
+        _ => None,
+    }
+}
+
+/// Apple TV and PlayStation first, then other recognised devices, then bare ports.
+fn quick_switch_rank(icon: &str) -> u8 {
+    match icon {
+        "apple-tv" => 0,
+        "playstation" => 1,
+        "console" => 2,
+        "streamer" | "computer" => 3,
+        _ => 4,
     }
 }
 
