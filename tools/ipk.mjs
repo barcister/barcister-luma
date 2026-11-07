@@ -118,6 +118,9 @@ export function normalizeAndVerifyPackage(bytes, manifest) {
       'porsche-718-spyder-rs-ruby',
       'porsche-taycan-rose',
       'porsche-macan-electric-slate',
+      'porsche-718-spyder-rs-orange',
+      'porsche-taycan-sport-turismo',
+      'porsche-macan-electric-white',
     ].flatMap((name) => [
       `assets/wallpapers/${name}.jpg`,
       `assets/thumbnails/${name}.jpg`,

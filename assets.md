@@ -27,9 +27,15 @@
   by Dinkun Chen, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 - `assets/wallpapers/porsche-macan-electric-slate.jpg`: [Porsche Macan (XAB) IMG 2425](<https://commons.wikimedia.org/wiki/File:Porsche_Macan_(XAB)_IMG_2425.jpg>)
   by Alexander-93, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+- `assets/wallpapers/porsche-718-spyder-rs-orange.jpg`: [Porsche 718 Boxster Spyder RS MYLE Festival 2025 DSC 9589](https://commons.wikimedia.org/wiki/File:Porsche_718_Boxster_Spyder_RS_MYLE_Festival_2025_DSC_9589.jpg)
+  by Alexander Migl, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+- `assets/wallpapers/porsche-taycan-sport-turismo.jpg`: [Porsche Taycan Sport Turismo GTS 1X7A0416](https://commons.wikimedia.org/wiki/File:Porsche_Taycan_Sport_Turismo_GTS_1X7A0416.jpg)
+  by Alexander Migl, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+- `assets/wallpapers/porsche-macan-electric-white.jpg`: [PORSCHE MACAN (XAB) China (2)](<https://commons.wikimedia.org/wiki/File:PORSCHE_MACAN_(XAB)_China_(2).jpg>)
+  by Dinkun Chen, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 - Changes to the Porsche photos: cropped, scaled and lightly adjusted for contrast and colour
-  into full-screen 1920×1080 wallpapers; the Ruby Star photo is widened with a blurred copy of
-  itself above and below. The CC BY-SA adaptations are shared under CC BY-SA 4.0. Porsche, 718,
+  into full-screen 1920×1080 wallpapers; the Ruby Star, orange Spyder RS and Sport Turismo photos are widened with a blurred copy of
+  themselves above and below. The CC BY-SA adaptations are shared under CC BY-SA 4.0. Porsche, 718,
   Taycan and Macan are trademarks of Dr. Ing. h.c. F. Porsche AG; Luma is not affiliated with
   Porsche.
 - Inter variable font (Latin, Latin Extended-A, Vietnamese + Cyrillic subset, `opsz` pinned at 14): Rasmus Andersson, SIL Open Font License 1.1, `assets/fonts/ofl.txt`.

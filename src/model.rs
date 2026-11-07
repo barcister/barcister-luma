@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, HashSet};
 
 pub const CATEGORIES: [&str; 4] = ["Streaming", "Music", "Gaming", "Utilities"];
-pub const BACKGROUNDS: [(&str, &str); 15] = [
+pub const BACKGROUNDS: [(&str, &str); 18] = [
     ("slate", "Slate"),
     ("midnight", "Midnight"),
     ("prism", "Prism"),
@@ -20,16 +20,22 @@ pub const BACKGROUNDS: [(&str, &str); 15] = [
     ("porsche-718-spyder-rs-ruby", "718 Spyder RS Ruby Star"),
     ("porsche-taycan-rose", "Taycan Rose"),
     ("porsche-macan-electric-slate", "Macan Electric Slate"),
+    ("porsche-718-spyder-rs-orange", "718 Spyder RS Orange"),
+    ("porsche-taycan-sport-turismo", "Taycan Sport Turismo"),
+    ("porsche-macan-electric-white", "Macan Electric White"),
 ];
 
 /// The Porsche backgrounds this build rotates through from its first run.
-pub const FIRST_RUN_BACKGROUNDS: [&str; 6] = [
+pub const FIRST_RUN_BACKGROUNDS: [&str; 9] = [
     "porsche-718-spyder-rs",
     "porsche-taycan",
     "porsche-macan-electric",
     "porsche-718-spyder-rs-ruby",
     "porsche-taycan-rose",
     "porsche-macan-electric-slate",
+    "porsche-718-spyder-rs-orange",
+    "porsche-taycan-sport-turismo",
+    "porsche-macan-electric-white",
 ];
 
 // Generic fallbacks use delimited words, so "game" does not match "endgame".

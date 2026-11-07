@@ -29,7 +29,16 @@ wallpapers/porsche-taycan-rose.jpg
 wallpapers/porsche-macan-electric-slate.jpg
   "Porsche Macan (XAB) IMG 2425" by Alexander-93
   https://commons.wikimedia.org/wiki/File:Porsche_Macan_(XAB)_IMG_2425.jpg
-  Licence for the five above: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+wallpapers/porsche-718-spyder-rs-orange.jpg
+  "Porsche 718 Boxster Spyder RS MYLE Festival 2025 DSC 9589" by Alexander Migl
+  https://commons.wikimedia.org/wiki/File:Porsche_718_Boxster_Spyder_RS_MYLE_Festival_2025_DSC_9589.jpg
+wallpapers/porsche-taycan-sport-turismo.jpg
+  "Porsche Taycan Sport Turismo GTS 1X7A0416" by Alexander Migl
+  https://commons.wikimedia.org/wiki/File:Porsche_Taycan_Sport_Turismo_GTS_1X7A0416.jpg
+wallpapers/porsche-macan-electric-white.jpg
+  "PORSCHE MACAN (XAB) China (2)" by Dinkun Chen
+  https://commons.wikimedia.org/wiki/File:PORSCHE_MACAN_(XAB)_China_(2).jpg
+  Licence for the eight above: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
   Modified: cropped, scaled and adjusted for contrast and colour. These adaptations are
   licensed under CC BY-SA 4.0.
 wallpapers/porsche-718-spyder-rs-ruby.jpg

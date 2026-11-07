@@ -264,7 +264,7 @@ These shortcuts work while Luma is focused. From another app, return to Luma fir
 
 ### Porsche backgrounds
 
-This build adds six full-screen backgrounds: two each of the **718 Spyder RS**, **Taycan** and
+This build adds nine full-screen backgrounds: three each of the **718 Spyder RS**, **Taycan** and
 **Macan Electric**. On its first run, Luma starts on the 718 Spyder RS and rotates through the cars
 every 15 minutes and on each start, with a slow cross-fade. The other built-in backgrounds are set aside so only the
 cars rotate; your own uploads join the rotation. Turn rotation off in **Settings → Background**.
