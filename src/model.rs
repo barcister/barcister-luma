@@ -285,6 +285,33 @@ impl Default for Preferences {
     }
 }
 
+/// This build's household: the greeting name and weather place Luma starts with on its first
+/// run, before any preferences are saved. Both can be changed or cleared in Settings.
+pub const FIRST_RUN_GREETING_NAME: &str = "Bálint";
+
+/// Rothenthurm, canton of Schwyz, Switzerland.
+pub fn first_run_weather_location() -> crate::weather::Location {
+    crate::weather::Location {
+        name: "Rothenthurm".into(),
+        region: "Schwyz".into(),
+        country: "Switzerland".into(),
+        latitude: 47.1047,
+        longitude: 8.6750,
+    }
+}
+
+impl Preferences {
+    /// Seeds the household name and weather place. Only called when no preferences file exists.
+    pub fn apply_first_run(&mut self) {
+        if self.greeting_name.is_empty() {
+            self.greeting_name = FIRST_RUN_GREETING_NAME.into();
+        }
+        if self.weather_location.is_none() {
+            self.weather_location = Some(first_run_weather_location());
+        }
+    }
+}
+
 impl Preferences {
     pub fn splash_background(&self) -> &str {
         self.splash_background

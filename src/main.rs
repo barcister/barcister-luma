@@ -656,7 +656,8 @@ fn run() -> Result<(), String> {
     };
     // Start the preview with the user's current choices, but keep test favorites
     // and hidden placeholders out of their normal preferences file.
-    let initial_preferences = if options.test_extra_apps > 0
+    let first_run = !default_preferences.exists() && !preferences_path.exists();
+    let mut initial_preferences = if options.test_extra_apps > 0
         && options.preferences.is_none()
         && !preferences_path.exists()
     {
@@ -664,6 +665,9 @@ fn run() -> Result<(), String> {
     } else {
         storage::load(&preferences_path)?
     };
+    if first_run {
+        initial_preferences.apply_first_run();
+    }
     let public_update_checks = update::public_checks_enabled(
         !options.script.is_empty(),
         options.test_update_version.is_some(),

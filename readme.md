@@ -250,6 +250,13 @@ Press **Back** on Home, or hold **Back** for 0.6 seconds from any page, to open 
 
 These shortcuts work while Luma is focused. From another app, return to Luma first.
 
+### Greeting and weather
+
+This build starts with **Good evening, Bálint.** and live weather for **Rothenthurm** (Schwyz) on its
+first run. Weather comes from [Open-Meteo](https://open-meteo.com/) and refreshes on its own. Change
+or clear either in **Settings → General** and **Settings → Weather**; your choices are kept. If Luma
+was installed before, its saved preferences win: set the name and search "Rothenthurm" in Settings.
+
 ### Quick Switch
 
 Connected HDMI devices appear on Home as **Quick Switch** tiles: one press of **OK** switches the TV

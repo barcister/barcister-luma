@@ -3296,3 +3296,32 @@ fn quick_switch_uses_device_photos_before_drawn_artwork() {
     assert!(!photographed.draw.iter().any(|draw| matches!(draw,
         Draw::Image(path, ..) if path.ends_with("device-ps5-pro.lvec"))));
 }
+
+#[test]
+fn first_run_greets_balint_with_rothenthurm_weather_but_keeps_saved_choices() {
+    let mut fresh = crate::model::Preferences::default();
+    fresh.apply_first_run();
+    assert_eq!(fresh.greeting_name, "Bálint");
+    let place = fresh.weather_location.as_ref().unwrap();
+    assert_eq!(place.name, "Rothenthurm");
+    assert!((place.latitude - 47.1047).abs() < 1e-6 && (place.longitude - 8.675).abs() < 1e-6);
+    assert_eq!(
+        crate::i18n::Language::En.greeting(20, &fresh.greeting_name),
+        "Good evening, Bálint."
+    );
+
+    let mut chosen = crate::model::Preferences {
+        greeting_name: "Ana".into(),
+        ..Default::default()
+    };
+    chosen.weather_location = Some(crate::weather::Location {
+        name: "Zug".into(),
+        region: String::new(),
+        country: String::new(),
+        latitude: 47.17,
+        longitude: 8.52,
+    });
+    chosen.apply_first_run();
+    assert_eq!(chosen.greeting_name, "Ana");
+    assert_eq!(chosen.weather_location.unwrap().name, "Zug");
+}
