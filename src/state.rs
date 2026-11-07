@@ -207,6 +207,9 @@ pub const KEYS: [&str; 40] = [
 ];
 
 pub struct State {
+    /// Photos for Quick Switch cards, by lowercase file stem (an input id such as
+    /// `com.webos.app.hdmi1`, or a device key such as `ps5-pro` / `apple-tv`).
+    pub device_photos: std::collections::BTreeMap<String, String>,
     pub page: Page,
     pub focus: Target,
     pub inventory: Inventory,
@@ -253,6 +256,7 @@ pub struct State {
 impl State {
     pub fn new(preferences: Preferences) -> Self {
         Self {
+            device_photos: Default::default(),
             page: Page::Home,
             focus: Target::Nav(0),
             inventory: Inventory::default(),

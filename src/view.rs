@@ -1264,12 +1264,14 @@ fn home(out: &mut Scene, state: &State, assets: &Assets, now: OffsetDateTime) {
             false,
         );
     }
+    // Tall device tiles, six to a row like the favourites: the device large on top and its
+    // name at the bottom-left. The focused tile turns white so it reads from across the room.
     for (index, input) in inputs.iter().enumerate() {
         let rect = Rect::new(
-            84. + (index % 3) as f32 * 591.45,
-            input_y + 58.4 + (index / 3) as f32 * 126.4,
-            569.1,
-            104.,
+            84. + (index % 6) as f32 * HOME_TILE_PITCH,
+            input_y + 58.4 + (index / 6) as f32 * (QUICK_TILE_HEIGHT + 25.6),
+            HOME_TILE_WIDTH,
+            QUICK_TILE_HEIGHT,
         );
         let focused = state.focus == Target::Input(input.id.clone());
         let name = state.preferences.input_name(input);
@@ -1277,119 +1279,98 @@ fn home(out: &mut Scene, state: &State, assets: &Assets, now: OffsetDateTime) {
         let brand = input_brand(icon);
         out.shadow(
             rect,
-            18.4,
+            19.2,
             if focused { 34. } else { 4. },
             if focused { 14. } else { 1. },
             if focused { 0.45 } else { 0.01 },
         );
         let (top, bottom) = match brand {
-            Some(brand) if focused => (brand.focused_top, brand.focused_bottom),
+            _ if focused => (c(0xffffff, 0.97), c(0xe4e6ea, 0.97)),
             Some(brand) => (brand.top, brand.bottom),
-            None if focused => (c(0x30363c, 0.70), c(0x242a30, 0.65)),
             None => (c(0x20252b, 0.60), c(0x171c22, 0.55)),
         };
         out.draw
-            .push(Draw::RoundedGradient(rect, 18.4, top, bottom));
+            .push(Draw::RoundedGradient(rect, 19.2, top, bottom));
         out.border(
             rect,
-            18.4,
+            19.2,
             1.,
-            c(
-                0xffffff,
-                if focused {
-                    0.30
-                } else if brand.is_some() {
-                    0.12
-                } else {
-                    0.063
-                },
-            ),
+            c(0xffffff, if brand.is_some() { 0.14 } else { 0.063 }),
         );
-        // Branded cards show the device itself (PS5 Pro, Apple TV 4K); other inputs keep an icon plate.
-        let art_name = device_art(icon, state.preferences.input_title(input), &input.title);
-        let text_x = if art_name.is_some() { 196. } else { 103. };
-        if let Some(art_name) = art_name {
+        let title = state.preferences.input_title(input);
+        let art_name = device_art(icon, title, &input.title);
+        let photo = device_photo(state, input, art_name, icon);
+        let stage = Rect::new(rect.x + 14., rect.y + 12., rect.w - 28., 140.);
+        if let Some(photo) = photo {
+            out.image(photo.clone(), stage, 12., true);
+        } else if let Some(art_name) = art_name {
             out.image(
                 assets.path(format!("ui-icons/{art_name}.lvec")),
-                Rect::new(rect.x + 12., rect.y + 4., 170., 96.),
+                stage,
                 0.,
                 true,
             );
         } else {
-            let art = Rect::new(rect.x + 21., rect.y + 20., 64., 64.);
-            if brand.is_some() {
-                out.draw.push(Draw::RoundedGradient(
-                    art,
-                    16.,
-                    c(0xffffff, 0.22),
-                    c(0xffffff, 0.08),
-                ));
-                out.border(art, 16., 1., c(0xffffff, 0.18));
-            } else {
-                out.draw.push(Draw::RoundedGradient(
-                    art,
-                    14.,
-                    c(0xd6d6d6, 0.24),
-                    c(0xa0a0a0, 0.10),
-                ));
-            }
-            let size = if icon == "apple-tv" { 47.2 } else { 40. };
+            let size = if icon == "apple-tv" { 84. } else { 72. };
             out.icon(
                 assets,
                 &format!("input-{icon}"),
                 Rect::new(
-                    art.x + (64. - size) / 2.,
-                    art.y + (64. - size) / 2.,
+                    stage.x + (stage.w - size) / 2.,
+                    stage.y + (stage.h - size) / 2.,
                     size,
                     size,
                 ),
-                if brand.is_some() {
-                    WHITE
+                if focused {
+                    c(0x17191c, 0.9)
                 } else {
                     c(0xdedede, 1.)
                 },
             );
         }
+        let (ink, soft) = if focused {
+            (c(0x111214, 1.), c(0x111214, 0.6))
+        } else {
+            (
+                WHITE,
+                c(0xf2f2f2, if brand.is_some() { 0.72 } else { 0.48 }),
+            )
+        };
         out.text(
-            state.preferences.input_title(input),
-            Rect::new(rect.x + text_x, rect.y + 22.3, 300., 28.8),
-            text(24.8, 600, -0.03),
-            WHITE,
+            title,
+            Rect::new(rect.x + 20., rect.y + 162., rect.w - 40., 28.8),
+            text(22.4, 600, -0.02),
+            ink,
             false,
         );
         out.text(
             input_status(input, name.is_some(), language),
-            Rect::new(rect.x + text_x, rect.y + 57.4, 300., 25.2),
+            Rect::new(rect.x + 20., rect.y + 192., rect.w - 40., 25.2),
             text(16.8, 400, 0.).leading(1.5),
-            c(0xf2f2f2, if brand.is_some() { 0.70 } else { 0.48 }),
+            soft,
             false,
         );
-        // A round "go" button signals that one press switches straight to the device.
-        let go = Rect::new(rect.x + rect.w - 66., rect.y + 31., 42., 42.);
-        out.shape(
-            go,
-            21.,
-            if focused {
-                c(0xffffff, 0.95)
-            } else {
-                c(0xffffff, if brand.is_some() { 0.16 } else { 0.08 })
-            },
-        );
-        out.icon(
-            assets,
-            "arrow",
-            Rect::new(go.x + 10., go.y + 10., 22., 22.),
-            if focused {
-                brand.map_or(c(0x17191c, 1.), |brand| brand.accent)
-            } else {
-                c(0xffffff, 0.85)
-            },
-        );
         if focused {
-            out.ring(rect, 18.4);
+            out.ring(rect, 19.2);
         }
         out.control(Target::Input(input.id.clone()), rect, true);
     }
+}
+
+const QUICK_TILE_HEIGHT: f32 = 230.4;
+
+/// A photo you added for this input or device, if any. See `device_photos` in main.rs.
+fn device_photo<'a>(
+    state: &'a State,
+    input: &Input,
+    art_name: Option<&str>,
+    icon: &str,
+) -> Option<&'a String> {
+    let photos = &state.device_photos;
+    photos
+        .get(&input.id.to_lowercase())
+        .or_else(|| art_name.and_then(|art| photos.get(art.trim_start_matches("device-"))))
+        .or_else(|| photos.get(icon))
 }
 
 /// Brand colours for Quick Switch cards; plain HDMI ports keep the neutral glass style.
@@ -1397,9 +1378,6 @@ fn home(out: &mut Scene, state: &State, assets: &Assets, now: OffsetDateTime) {
 struct InputBrand {
     top: Color,
     bottom: Color,
-    focused_top: Color,
-    focused_bottom: Color,
-    accent: Color,
 }
 
 fn input_brand(icon: &str) -> Option<InputBrand> {
@@ -1408,25 +1386,16 @@ fn input_brand(icon: &str) -> Option<InputBrand> {
         "playstation" => Some(InputBrand {
             top: c(0x0a6fd6, 0.92),
             bottom: c(0x00327a, 0.92),
-            focused_top: c(0x2b8af0, 0.97),
-            focused_bottom: c(0x0047a8, 0.97),
-            accent: c(0x0064c8, 1.),
         }),
         // Apple TV graphite.
         "apple-tv" => Some(InputBrand {
             top: c(0x4a4a4f, 0.90),
             bottom: c(0x111113, 0.92),
-            focused_top: c(0x606066, 0.96),
-            focused_bottom: c(0x1c1c1f, 0.96),
-            accent: c(0x111113, 1.),
         }),
         // Other consoles: a deep green.
         "console" => Some(InputBrand {
             top: c(0x1f8a3a, 0.90),
             bottom: c(0x0b4a1c, 0.92),
-            focused_top: c(0x2ea84c, 0.96),
-            focused_bottom: c(0x0f5c24, 0.96),
-            accent: c(0x0f6b2a, 1.),
         }),
         _ => None,
     }

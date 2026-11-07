@@ -3269,3 +3269,30 @@ fn update_card_shows_progress_restores_retry_and_ignores_presses_while_busy() {
     state.install_response(Response::Finished(Ok(())));
     assert_eq!(state.update_status, Status::Unchecked);
 }
+
+#[test]
+fn quick_switch_uses_device_photos_before_drawn_artwork() {
+    use crate::renderer::Draw;
+    let mut state = ready();
+    state
+        .preferences
+        .set_input_name("com.webos.app.hdmi1", "PS5 Pro");
+    let drawn = scene(&state);
+    assert!(drawn.draw.iter().any(|draw| matches!(draw,
+        Draw::Image(path, ..) if path.ends_with("ui-icons/device-ps5-pro.lvec"))));
+
+    state
+        .device_photos
+        .insert("ps5-pro".into(), "/tmp/devices/ps5-pro.png".into());
+    state.device_photos.insert(
+        "com.webos.app.hdmi2".into(),
+        "/tmp/devices/hdmi2.png".into(),
+    );
+    let photographed = scene(&state);
+    assert!(photographed.draw.iter().any(|draw| matches!(draw,
+        Draw::Image(path, ..) if path == "/tmp/devices/ps5-pro.png")));
+    assert!(photographed.draw.iter().any(|draw| matches!(draw,
+        Draw::Image(path, ..) if path == "/tmp/devices/hdmi2.png")));
+    assert!(!photographed.draw.iter().any(|draw| matches!(draw,
+        Draw::Image(path, ..) if path.ends_with("device-ps5-pro.lvec"))));
+}
