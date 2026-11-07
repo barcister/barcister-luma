@@ -253,11 +253,11 @@ These shortcuts work while Luma is focused. From another app, return to Luma fir
 ### Quick Switch
 
 Connected HDMI devices appear on Home as **Quick Switch** tiles: one press of **OK** switches the TV
-to that input. Apple TV and PlayStation tiles come first, in their own colours, with a picture of
-the device. Rename an input in **Settings → Inputs** ("Apple TV", "PS5 Pro", "Xbox") to pick its
+to that input. Apple TV and PlayStation tiles come first, in their own colours, with a photo of
+the device (PS5 Pro and Apple TV 4K photos are included; see [assets.md](assets.md) for credits). Rename an input in **Settings → Inputs** ("Apple TV", "PS5 Pro", "Xbox") to pick its
 picture; "Pro" chooses the PS5 Pro.
 
-To use real photos of your devices, copy PNG, JPEG or WebP files to the TV and restart Luma:
+To use photos of your own devices instead, copy PNG, JPEG or WebP files to the TV and restart Luma:
 
 ```sh
 ssh root@TV_IP mkdir -p /media/developer/com.ecklf.luma/devices

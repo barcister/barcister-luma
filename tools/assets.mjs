@@ -12,7 +12,7 @@ const highResolution = process.argv.includes('--4k');
 for (const legacy of ['app-icons', 'icons.json', 'colors.json']) {
   await fs.rm(path.join(out, legacy), { recursive: true, force: true });
 }
-for (const directory of ['wallpapers', 'thumbnails', 'logos', 'ui-icons', 'surfaces', 'splash']) {
+for (const directory of ['wallpapers', 'thumbnails', 'logos', 'ui-icons', 'surfaces', 'splash', 'devices']) {
   await fs.mkdir(path.join(out, directory), { recursive: true });
 }
 
@@ -189,3 +189,12 @@ await sharp(path.join(source, 'app-icon.svg'))
   .png()
   .toFile(path.join(out, 'app-icon-large.png'));
 console.log(`Native artwork ready: ${path.relative(root, out)}`);
+
+// Quick Switch device photos: transparent PNGs, scaled to the tile's 2x size.
+for (const file of await fs.readdir(path.join(source, 'devices'))) {
+  if (!file.endsWith('.png')) continue;
+  await sharp(path.join(source, 'devices', file))
+    .resize({ width: 560, height: 320, fit: 'inside', withoutEnlargement: true })
+    .png({ compressionLevel: 9 })
+    .toFile(path.join(out, 'devices', file));
+}

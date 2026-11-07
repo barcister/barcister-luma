@@ -692,7 +692,14 @@ fn run() -> Result<(), String> {
     if webos && options.weather_test_server.is_some() {
         return Err("Weather test servers are only available in desktop builds".into());
     }
-    state.device_photos = device_photos(&preferences_path);
+    // Photos bundled with the app first, then any you add beside the preferences file.
+    state.device_photos = device_photos(&assets.root.join("devices"));
+    state.device_photos.extend(device_photos(
+        &preferences_path
+            .parent()
+            .unwrap_or(Path::new("."))
+            .join("devices"),
+    ));
     let weather_cache = weather_service::cache_path(&preferences_path);
     state.weather.cache = weather_service::load_cache(&weather_cache);
     let weather_service = weather_service::Service::new(
@@ -1959,16 +1966,11 @@ fn hit(
     state.hit_test(controls, x, y)
 }
 
-/// Your own device photos for Quick Switch: PNG, JPEG or WebP files in a `devices`
-/// folder beside the preferences file, read once at start. Name a file after the
-/// device (`ps5-pro.png`, `ps5.png`, `apple-tv.png`) or the input (`com.webos.app.hdmi1.png`).
-/// A PNG with a transparent background looks best.
-fn device_photos(preferences: &Path) -> std::collections::BTreeMap<String, String> {
-    let directory = preferences
-        .parent()
-        .unwrap_or(Path::new("."))
-        .join("devices");
-    let Ok(entries) = std::fs::read_dir(&directory) else {
+/// Device photos for Quick Switch: PNG, JPEG or WebP files in `directory`, read once at
+/// start. A file is named after the device (`ps5-pro.png`, `ps5.png`, `apple-tv.png`) or
+/// the input (`com.webos.app.hdmi1.png`). A PNG with a transparent background looks best.
+fn device_photos(directory: &Path) -> std::collections::BTreeMap<String, String> {
+    let Ok(entries) = std::fs::read_dir(directory) else {
         return Default::default();
     };
     entries

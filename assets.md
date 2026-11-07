@@ -115,6 +115,20 @@ or collected icon maps in the repository. Names and marks remain the property of
 app owners. Luma's folded-light L logo is original artwork; its SVG geometry produces the
 small/large webOS installation icons.
 
+### Quick Switch device photos
+
+- `assets/devices/ps5-pro.png`: "PlayStation 5 Pro no disc drive" by BeatEmUps,
+  https://commons.wikimedia.org/wiki/File:PlayStation_5_Pro_no_disc_drive.jpg,
+  [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). Changes: background removed by
+  cutting the console out along its outline, cropped and scaled.
+- `assets/devices/apple-tv.png`: "Apple TV 4K 3gen 64gb" by Davidbspalding,
+  https://commons.wikimedia.org/wiki/File:Apple_TV_4K_3gen_64gb.png,
+  [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Changes: cropped and scaled.
+  This adapted image is shared under the same CC BY-SA 4.0 licence.
+
+PlayStation, PS5 and Apple TV are trademarks of their owners. Luma is not affiliated with Sony or
+Apple. Photos you add to the `devices` folder on the TV replace these.
+
 Weather data: [Open-Meteo](https://open-meteo.com/), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 The provided Apple design guidance informed focus, motion and materials. This is not an Apple

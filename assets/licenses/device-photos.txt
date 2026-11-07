@@ -1,0 +1,15 @@
+Quick Switch device photos
+
+ps5-pro.png
+  "PlayStation 5 Pro no disc drive" by BeatEmUps
+  https://commons.wikimedia.org/wiki/File:PlayStation_5_Pro_no_disc_drive.jpg
+  Licence: CC BY 3.0, https://creativecommons.org/licenses/by/3.0/
+  Modified: background removed, cropped and scaled.
+
+apple-tv.png
+  "Apple TV 4K 3gen 64gb" by Davidbspalding
+  https://commons.wikimedia.org/wiki/File:Apple_TV_4K_3gen_64gb.png
+  Licence: CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/
+  Modified: cropped and scaled. This adaptation is licensed under CC BY-SA 4.0.
+
+PlayStation, PS5 and Apple TV are trademarks of their respective owners.
