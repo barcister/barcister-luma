@@ -203,15 +203,19 @@ try {
     .jpeg()
     .toFile(path.join(customDirectory, 'thumbnail.jpg'));
   await fs.writeFile(path.join(customDirectory, 'metadata.json'), JSON.stringify({ id: customId }));
-  const custom = await scenario('wallpaper-custom', 'settings,down,down,enter,down,enter,enter');
+  // The custom upload follows the 12 built-in backgrounds: two rows below Forest in the 3-column gallery.
+  const custom = await scenario(
+    'wallpaper-custom',
+    'settings,down,down,enter,down,down,enter,enter',
+  );
   assert.equal(custom.preferences.background, customId);
   assert.equal(custom.modal, false);
-  assert.deepEqual(custom.focus, { Background: 9 });
+  assert.deepEqual(custom.focus, { Background: 12 });
   const customRestored = await scenario('wallpaper-custom-restored', 'home,down');
   assert.equal(customRestored.preferences.background, customId);
   const bundledRestored = await scenario(
     'wallpaper-bundled-restored',
-    'settings,down,down,enter,up,enter,enter',
+    'settings,down,down,enter,up,up,enter,enter',
   );
   assert.equal(bundledRestored.preferences.background, 'forest');
   const clock = await scenario('clock', 'settings,click:900:284');

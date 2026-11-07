@@ -656,7 +656,10 @@ fn run() -> Result<(), String> {
     };
     // Start the preview with the user's current choices, but keep test favorites
     // and hidden placeholders out of their normal preferences file.
-    let first_run = !default_preferences.exists() && !preferences_path.exists();
+    // Scripted desktop runs are test harnesses that expect upstream defaults, so only a real
+    // first start gets this build's name, weather place and Porsche rotation.
+    let first_run =
+        options.script.is_empty() && !default_preferences.exists() && !preferences_path.exists();
     let mut initial_preferences = if options.test_extra_apps > 0
         && options.preferences.is_none()
         && !preferences_path.exists()

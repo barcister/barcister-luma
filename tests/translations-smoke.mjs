@@ -122,7 +122,7 @@ try {
     'home',
     'settings',
     'favorites',
-    'inputsHeading',
+    'quickSwitch',
     'evening',
     'setWeatherLocation',
   ])
@@ -142,7 +142,7 @@ try {
     'apps',
     'settings',
     'favorites',
-    'inputsHeading',
+    'quickSwitch',
     'evening',
     'setWeatherLocation',
   ])
@@ -230,7 +230,7 @@ try {
     'apps',
     'settings',
     'favorites',
-    'inputsHeading',
+    'quickSwitch',
     'evening',
     'setWeatherLocation',
   ])
@@ -294,7 +294,7 @@ try {
     'apps',
     'settings',
     'favorites',
-    'inputsHeading',
+    'quickSwitch',
     'evening',
     'setWeatherLocation',
   ])
@@ -353,7 +353,7 @@ try {
     'apps',
     'settings',
     'favorites',
-    'inputsHeading',
+    'quickSwitch',
     'evening',
     'setWeatherLocation',
   ])
